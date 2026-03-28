@@ -1,24 +1,18 @@
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useUiStore } from "@/stores/uiStore";
+import { useEffect } from "react";
 
 export function ThemeToggle() {
-  const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
+  const { themeMode, toggleTheme } = useUiStore();
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-    localStorage.setItem("harvester-theme", dark ? "dark" : "light");
-  }, [dark]);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("harvester-theme");
-    if (saved === "dark") setDark(true);
-    else if (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches) setDark(true);
-  }, []);
+    document.documentElement.classList.toggle("dark", themeMode === "dark");
+  }, [themeMode]);
 
   return (
-    <Button variant="ghost" size="icon" onClick={() => setDark((d) => !d)} aria-label="Toggle theme">
-      {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+    <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
+      {themeMode === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
     </Button>
   );
 }

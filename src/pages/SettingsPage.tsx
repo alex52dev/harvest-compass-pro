@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Settings, Globe, User, MapPin, Bell, Palette, Server } from "lucide-react";
+import { Settings, Globe, User, Bell, Server, Eye, Accessibility } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Language } from "@/types/api";
-import { useState } from "react";
+import { useUiStore } from "@/stores/uiStore";
 import { toast } from "sonner";
 
 const fadeIn = {
@@ -18,11 +18,7 @@ const fadeIn = {
 };
 
 export default function SettingsPage() {
-  const [lang, setLang] = useState("ENGLISH");
-  const [notifications, setNotifications] = useState(true);
-  const [weatherAlerts, setWeatherAlerts] = useState(true);
-  const [pestAlerts, setPestAlerts] = useState(true);
-
+  const { language, setLanguage, highContrastEnabled, toggleHighContrast, simpleLanguageMode, toggleSimpleLanguage } = useUiStore();
   const apiBase = import.meta.env.VITE_API_BASE_URL || "/api/v1";
 
   return (
@@ -53,7 +49,7 @@ export default function SettingsPage() {
           <Globe className="h-5 w-5 text-harvest-sky" />
           <h3 className="font-heading font-semibold text-card-foreground">Language</h3>
         </div>
-        <Select value={lang} onValueChange={setLang}>
+        <Select value={language} onValueChange={setLanguage}>
           <SelectTrigger className="font-body max-w-xs"><SelectValue /></SelectTrigger>
           <SelectContent>
             {Object.values(Language).map((l) => (
@@ -64,34 +60,55 @@ export default function SettingsPage() {
         <p className="text-xs text-muted-foreground font-body mt-2">Interface language for labels and recommendations</p>
       </motion.div>
 
-      {/* Notifications */}
+      {/* Accessibility */}
       <motion.div custom={2} initial="hidden" animate="visible" variants={fadeIn} className="bg-card rounded-lg shadow-card border border-border p-6 mb-6">
         <div className="flex items-center gap-3 mb-4">
-          <Bell className="h-5 w-5 text-accent" />
-          <h3 className="font-heading font-semibold text-card-foreground">Notifications</h3>
+          <Accessibility className="h-5 w-5 text-accent" />
+          <h3 className="font-heading font-semibold text-card-foreground">Accessibility</h3>
         </div>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-body text-sm text-card-foreground">Enable notifications</p>
-              <p className="text-xs text-muted-foreground font-body">Receive in-app alerts</p>
+              <p className="font-body text-sm text-card-foreground">High contrast mode</p>
+              <p className="text-xs text-muted-foreground font-body">Increase text contrast for better readability</p>
             </div>
-            <Switch checked={notifications} onCheckedChange={setNotifications} />
+            <Switch checked={highContrastEnabled} onCheckedChange={toggleHighContrast} />
           </div>
           <Separator />
           <div className="flex items-center justify-between">
+            <div>
+              <p className="font-body text-sm text-card-foreground">Simple language mode</p>
+              <p className="text-xs text-muted-foreground font-body">Use icon-first, minimal text interface</p>
+            </div>
+            <Switch checked={simpleLanguageMode} onCheckedChange={toggleSimpleLanguage} />
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Notifications */}
+      <motion.div custom={3} initial="hidden" animate="visible" variants={fadeIn} className="bg-card rounded-lg shadow-card border border-border p-6 mb-6">
+        <div className="flex items-center gap-3 mb-4">
+          <Bell className="h-5 w-5 text-harvest-gold" />
+          <h3 className="font-heading font-semibold text-card-foreground">Notification Preferences</h3>
+        </div>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
             <p className="font-body text-sm text-card-foreground">Weather alerts</p>
-            <Switch checked={weatherAlerts} onCheckedChange={setWeatherAlerts} disabled={!notifications} />
+            <Switch defaultChecked />
           </div>
           <div className="flex items-center justify-between">
             <p className="font-body text-sm text-card-foreground">Pest & disease warnings</p>
-            <Switch checked={pestAlerts} onCheckedChange={setPestAlerts} disabled={!notifications} />
+            <Switch defaultChecked />
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="font-body text-sm text-card-foreground">Market price changes</p>
+            <Switch defaultChecked />
           </div>
         </div>
       </motion.div>
 
       {/* API Status */}
-      <motion.div custom={3} initial="hidden" animate="visible" variants={fadeIn} className="bg-card rounded-lg shadow-card border border-border p-6 mb-6">
+      <motion.div custom={4} initial="hidden" animate="visible" variants={fadeIn} className="bg-card rounded-lg shadow-card border border-border p-6 mb-6">
         <div className="flex items-center gap-3 mb-4">
           <Server className="h-5 w-5 text-harvest-earth" />
           <h3 className="font-heading font-semibold text-card-foreground">API Connection</h3>
@@ -100,10 +117,9 @@ export default function SettingsPage() {
           <Badge className="bg-primary/10 text-primary border-0 font-body text-xs">Connected</Badge>
           <span className="text-sm font-body text-muted-foreground">{apiBase}</span>
         </div>
-        <p className="text-xs text-muted-foreground font-body mt-2">Backend endpoint for all data operations</p>
       </motion.div>
 
-      <motion.div custom={4} initial="hidden" animate="visible" variants={fadeIn} className="flex justify-end">
+      <motion.div custom={5} initial="hidden" animate="visible" variants={fadeIn} className="flex justify-end">
         <Button onClick={() => toast.success("Settings saved")} className="font-body">Save Changes</Button>
       </motion.div>
     </div>
