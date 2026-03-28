@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, MapPin, Sprout, BarChart3, CloudSun, FlaskConical, MessageSquare, TrendingUp, Bug, ShieldAlert, Lightbulb, Store } from "lucide-react";
+import { LayoutDashboard, Users, MapPin, Sprout, BarChart3, CloudSun, FlaskConical, MessageSquare, TrendingUp, Bug, ShieldAlert, Lightbulb, Store, Settings } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import {
@@ -36,8 +36,9 @@ const predictionsNav = [
   { title: "Crop Suitability", url: "/predictions/crop-suitability", icon: TrendingUp },
 ];
 
-const feedbackNav = [
+const bottomNav = [
   { title: "Feedback", url: "/feedback", icon: MessageSquare },
+  { title: "Settings", url: "/settings", icon: Settings },
 ];
 
 export function AppSidebar() {
@@ -94,7 +95,7 @@ export function AppSidebar() {
         {renderGroup("Overview", mainNav)}
         {renderGroup("Data", dataNav)}
         {renderGroup("Predictions", predictionsNav)}
-        {renderGroup("Engage", feedbackNav)}
+        {renderGroup("General", bottomNav)}
       </SidebarContent>
       <SidebarFooter className="p-4">
         {!collapsed && (

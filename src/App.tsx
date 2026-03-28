@@ -12,9 +12,17 @@ import WeatherPage from "./pages/WeatherPage";
 import SoilDataPage from "./pages/SoilDataPage";
 import PredictionsPage from "./pages/PredictionsPage";
 import FeedbackPage from "./pages/FeedbackPage";
+import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -32,6 +40,7 @@ const App = () => (
             <Route path="/soil-data" element={<SoilDataPage />} />
             <Route path="/predictions/*" element={<PredictionsPage />} />
             <Route path="/feedback" element={<FeedbackPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AppLayout>
