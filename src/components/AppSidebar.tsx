@@ -1,39 +1,33 @@
-import { LayoutDashboard, Users, MapPin, Sprout, BarChart3, CloudSun, FlaskConical, MessageSquare, TrendingUp, Bug, ShieldAlert, Lightbulb, Store, Settings } from "lucide-react";
+import {
+  LayoutDashboard, MapPin, Sprout, CloudSun, FlaskConical, ShieldAlert, Bug,
+  Lightbulb, Store, BarChart3, MessageSquare, Settings, Tractor, TrendingUp,
+} from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarHeader,
-  SidebarFooter,
-  useSidebar,
+  Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
+  SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
+  SidebarHeader, SidebarFooter, useSidebar,
 } from "@/components/ui/sidebar";
 
 const mainNav = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Farmers", url: "/farmers", icon: Users },
-  { title: "Farms", url: "/farms", icon: MapPin },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+  { title: "Farm Management", url: "/farm-management", icon: Tractor },
   { title: "Crops", url: "/crops", icon: Sprout },
 ];
 
 const dataNav = [
-  { title: "Weather", url: "/weather", icon: CloudSun },
-  { title: "Soil Data", url: "/soil-data", icon: FlaskConical },
+  { title: "Weather & Alerts", url: "/weather-alerts", icon: CloudSun },
+  { title: "Soil Insights", url: "/soil-insights", icon: FlaskConical },
 ];
 
-const predictionsNav = [
-  { title: "Yield", url: "/predictions/yield", icon: BarChart3 },
+const insightsNav = [
+  { title: "Risk Assessment", url: "/risk-assessment", icon: ShieldAlert },
   { title: "Pest & Disease", url: "/predictions/pest-disease", icon: Bug },
-  { title: "Risk", url: "/predictions/risk", icon: ShieldAlert },
-  { title: "Market", url: "/predictions/market", icon: Store },
-  { title: "Recommendations", url: "/predictions/recommendations", icon: Lightbulb },
+  { title: "Recommendations", url: "/recommendations", icon: Lightbulb },
+  { title: "Yield Predictions", url: "/predictions/yield", icon: BarChart3 },
   { title: "Crop Suitability", url: "/predictions/crop-suitability", icon: TrendingUp },
+  { title: "Market Insights", url: "/market-insights", icon: Store },
 ];
 
 const bottomNav = [
@@ -49,7 +43,11 @@ export function AppSidebar() {
 
   const renderGroup = (label: string, items: typeof mainNav) => (
     <SidebarGroup key={label}>
-      {!collapsed && <SidebarGroupLabel className="text-sidebar-foreground/50 uppercase text-[10px] tracking-widest font-body">{label}</SidebarGroupLabel>}
+      {!collapsed && (
+        <SidebarGroupLabel className="text-sidebar-foreground/50 uppercase text-[10px] tracking-widest font-body">
+          {label}
+        </SidebarGroupLabel>
+      )}
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
@@ -57,7 +55,7 @@ export function AppSidebar() {
               <SidebarMenuButton asChild>
                 <NavLink
                   to={item.url}
-                  end={item.url === "/"}
+                  end={item.url === "/dashboard"}
                   className="flex items-center gap-3 px-3 py-2 rounded-md text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
                   activeClassName="bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
                 >
@@ -94,7 +92,7 @@ export function AppSidebar() {
       <SidebarContent className="px-2">
         {renderGroup("Overview", mainNav)}
         {renderGroup("Data", dataNav)}
-        {renderGroup("Predictions", predictionsNav)}
+        {renderGroup("AI Insights", insightsNav)}
         {renderGroup("General", bottomNav)}
       </SidebarContent>
       <SidebarFooter className="p-4">
