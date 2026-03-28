@@ -66,6 +66,58 @@
     --font-heading: 'Playfair Display', serif;
     --font-body: 'DM Sans', sans-serif;
   }
+
+  .dark {
+    --background: 150 20% 8%;
+    --foreground: 40 20% 92%;
+
+    --card: 150 18% 12%;
+    --card-foreground: 40 20% 92%;
+
+    --popover: 150 18% 12%;
+    --popover-foreground: 40 20% 92%;
+
+    --primary: 145 55% 42%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 150 15% 16%;
+    --secondary-foreground: 40 20% 85%;
+
+    --muted: 150 12% 18%;
+    --muted-foreground: 40 10% 60%;
+
+    --accent: 38 60% 50%;
+    --accent-foreground: 40 20% 92%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 150 12% 20%;
+    --input: 150 12% 20%;
+    --ring: 145 55% 42%;
+
+    --harvest-green: 145 55% 42%;
+    --harvest-green-light: 145 45% 52%;
+    --harvest-gold: 38 60% 50%;
+    --harvest-gold-light: 38 55% 60%;
+    --harvest-earth: 25 25% 50%;
+    --harvest-earth-light: 25 20% 60%;
+    --harvest-sky: 200 50% 55%;
+    --harvest-dark: 150 20% 8%;
+    --harvest-cream: 150 20% 8%;
+
+    --shadow-card: 0 4px 24px -4px hsl(0 0% 0% / 0.3);
+    --shadow-elevated: 0 12px 40px -8px hsl(0 0% 0% / 0.5);
+
+    --sidebar-background: 150 25% 6%;
+    --sidebar-foreground: 40 20% 85%;
+    --sidebar-primary: 145 55% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 145 30% 14%;
+    --sidebar-accent-foreground: 40 20% 85%;
+    --sidebar-border: 150 15% 14%;
+    --sidebar-ring: 145 55% 42%;
+  }
 }
 
 @layer base {

@@ -6,6 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import { useCrops } from "@/hooks/useApi";
+import { CardSkeleton } from "@/components/LoadingState";
+import { ErrorState } from "@/components/ErrorState";
+import { EmptyState } from "@/components/EmptyState";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 12 },
@@ -18,11 +22,17 @@ const catColors: Record<string, string> = {
   FRUIT: "bg-destructive/10 text-destructive",
   LEGUME: "bg-harvest-earth/10 text-harvest-earth",
   OILSEED: "bg-accent/10 text-accent-foreground",
+  ROOT: "bg-harvest-sky/10 text-harvest-sky",
+  FIBER: "bg-muted text-muted-foreground",
+  FORAGE: "bg-primary/10 text-primary",
 };
 
 export default function CropsPage() {
   const [search, setSearch] = useState("");
-  const filtered = mockCrops.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()));
+  const { data: apiCrops, isLoading, isError, refetch } = useCrops();
+
+  const crops = apiCrops || mockCrops;
+  const filtered = crops.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="p-6 md:p-8 max-w-7xl mx-auto">
@@ -35,35 +45,43 @@ export default function CropsPage() {
         <Input placeholder="Search crops..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9 font-body" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {filtered.map((crop, i) => (
-          <motion.div key={crop.cropId} custom={i} initial="hidden" animate="visible" variants={fadeIn} className="bg-card rounded-lg shadow-card border border-border p-5 hover:shadow-elevated transition-shadow cursor-pointer">
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Sprout className="h-4 w-4 text-primary" />
+      {isLoading && !apiCrops ? (
+        <CardSkeleton count={8} />
+      ) : isError && !apiCrops ? (
+        <ErrorState message="Could not load crops" onRetry={() => refetch()} />
+      ) : filtered.length === 0 ? (
+        <EmptyState title="No crops found" icon={<Sprout className="h-7 w-7 text-muted-foreground" />} />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {filtered.map((crop, i) => (
+            <motion.div key={crop.cropId} custom={i} initial="hidden" animate="visible" variants={fadeIn} className="bg-card rounded-lg shadow-card border border-border p-5 hover:shadow-elevated transition-shadow cursor-pointer">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Sprout className="h-4 w-4 text-primary" />
+                </div>
+                {crop.category && (
+                  <Badge className={`${catColors[crop.category] || "bg-muted text-muted-foreground"} border-0 font-body text-xs`}>
+                    {crop.category}
+                  </Badge>
+                )}
               </div>
-              {crop.category && (
-                <Badge className={`${catColors[crop.category] || "bg-muted text-muted-foreground"} border-0 font-body text-xs`}>
-                  {crop.category}
-                </Badge>
-              )}
-            </div>
-            <h3 className="font-heading font-semibold text-card-foreground">{crop.name}</h3>
-            <div className="mt-3 space-y-2">
-              {crop.typicalYieldPerHectare && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground font-body">
-                  <BarChart3 className="h-3 w-3" /> {crop.typicalYieldPerHectare} t/ha typical
-                </div>
-              )}
-              {crop.growthDurationDays && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground font-body">
-                  <Clock className="h-3 w-3" /> {crop.growthDurationDays} days growth
-                </div>
-              )}
-            </div>
-          </motion.div>
-        ))}
-      </div>
+              <h3 className="font-heading font-semibold text-card-foreground">{crop.name}</h3>
+              <div className="mt-3 space-y-2">
+                {crop.typicalYieldPerHectare && (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground font-body">
+                    <BarChart3 className="h-3 w-3" /> {crop.typicalYieldPerHectare} t/ha typical
+                  </div>
+                )}
+                {crop.growthDurationDays && (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground font-body">
+                    <Clock className="h-3 w-3" /> {crop.growthDurationDays} days growth
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
