@@ -3,8 +3,16 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import { AppLayout } from "@/components/AppLayout";
+import DashboardPage from "./pages/DashboardPage";
+import FarmersPage from "./pages/FarmersPage";
+import FarmsPage from "./pages/FarmsPage";
+import CropsPage from "./pages/CropsPage";
+import WeatherPage from "./pages/WeatherPage";
+import SoilDataPage from "./pages/SoilDataPage";
+import PredictionsPage from "./pages/PredictionsPage";
+import FeedbackPage from "./pages/FeedbackPage";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -14,11 +22,19 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AppLayout>
+          <Routes>
+            <Route path="/" element={<DashboardPage />} />
+            <Route path="/farmers" element={<FarmersPage />} />
+            <Route path="/farms" element={<FarmsPage />} />
+            <Route path="/crops" element={<CropsPage />} />
+            <Route path="/weather" element={<WeatherPage />} />
+            <Route path="/soil-data" element={<SoilDataPage />} />
+            <Route path="/predictions/*" element={<PredictionsPage />} />
+            <Route path="/feedback" element={<FeedbackPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AppLayout>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
